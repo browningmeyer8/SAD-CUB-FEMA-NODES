@@ -31,13 +31,13 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // --- YOUR NEW "FEMA NODES" FIREBASE CONFIG ---
+    // --- YOUR "FEMA NODES" FIREBASE CONFIG ---
     const firebaseConfig = {
       apiKey: "AIzaSyChqasiD8LXTIktBt7uxxwD3WyUd4k8How",
       authDomain: "sad-cub-fema-nodes.firebaseapp.com",
       databaseURL: "https://sad-cub-fema-nodes-default-rtdb.firebaseio.com",
       projectId: "sad-cub-fema-nodes",
-      storageBucket: "sad-cub-fema-nodes.appspot.com",
+      storageBucket: "sad-cub-fema-nodes.firebasestorage.app",
       messagingSenderId: "492482910097",
       appId: "1:492482910097:web:e970fcd951a09ad1a1ac30",
       measurementId: "G-NMHPGVMGMM"
@@ -69,19 +69,27 @@
             if (currentContent) { quill.root.innerHTML = currentContent; }
         });
 
+        // --- MODIFIED SAVE BUTTON LOGIC ---
         saveBtn.addEventListener('click', function() {
             const newContent = quill.root.innerHTML;
+            // This handles the case where the editor is empty
             if (newContent === '<p><br></p>') {
                 contentRef.remove();
-                window.location.href = 'fema-nodes.html';
+                window.location.href = 'index.html'; // Go back to the main index page
                 return;
             }
-            contentRef.set(newContent).then(() => { window.location.href = 'fema-nodes.html'; });
+            // This handles a successful save
+            contentRef.set(newContent).then(() => { 
+                window.location.href = 'index.html'; // Go back to the main index page
+            });
         });
+        // --- END OF MODIFIED SECTION ---
 
         clearBtn.addEventListener('click', function() {
             if (confirm("Are you sure?")) {
-                contentRef.remove().then(() => { quill.setText(''); });
+                contentRef.remove().then(() => {
+                    quill.setText('');
+                });
             }
         });
     });
